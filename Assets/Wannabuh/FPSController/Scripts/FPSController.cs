@@ -25,6 +25,8 @@ namespace Wannabuh.FPSController
         [SerializeField] private float _skinWidth = 0.015f;
         [SerializeField] private int _maxBounces = 5;
         [SerializeField] private float _maxSlopeAngle = 55;
+        [SerializeField] private int _maxJumps = 1;
+        [SerializeField] public CinemachineCamera Camera;
         
         private FPSActions _fpsActions;
 
@@ -38,11 +40,13 @@ namespace Wannabuh.FPSController
         private float _verticalVelocity;
         private float _currentTilt;
         private Bounds _bounds;
+        private int _currentJump;
+        private int _extraJumps;
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Awake()
         {
-            _fpsActions = new FPSActions();
+            _fpsActions = InputManager.Instance.FPSActions;
             _rb = GetComponent<Rigidbody>();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -61,7 +65,9 @@ namespace Wannabuh.FPSController
 
         private void OnDisable()
         {
+            _fpsActions.Player.Move.performed -= OnMove;
             _fpsActions.Player.Move.Disable();
+            _fpsActions.Player.Jump.performed -= OnJump;
             _fpsActions.Player.Jump.Disable();
             _fpsActions.Player.Look.Disable();
         }
@@ -71,6 +77,7 @@ namespace Wannabuh.FPSController
             foreach (var controller in _axisController.Controllers)
             {
                 controller.Input.Gain = controller.Name == "Look X (Pan)" ? _sensitivity : -_sensitivity;
+                controller.Input.InputAction = InputActionReference.Create(_fpsActions.Player.Look);
             }
         }
 
@@ -175,19 +182,29 @@ namespace Wannabuh.FPSController
                 _isGrounded = true;
                 if (_verticalVelocity < 0.0f)
                 {
-                    _verticalVelocity = -2.0f;
+                    _verticalVelocity = 0.0f;
+                    _currentJump = 0;
                 }
 
                 if (_jumpInput)
                 {
 					_verticalVelocity = Mathf.Sqrt(_jumpForce * -2f * _gravity.y);
+                    _currentJump++;
                 }
             }
             else
             {
                 _isGrounded = false;
+                if (_jumpInput && _currentJump < _maxJumps + _extraJumps)
+                {
+					_verticalVelocity = Mathf.Sqrt(_jumpForce * -2f * _gravity.y);
+                    _currentJump++;
+                }
                 _verticalVelocity += _gravity.y * Time.fixedDeltaTime;
             }
+
+            _jumpInput = false;
+            _extraJumps = 0;
         }
 
         private void Look()
@@ -212,6 +229,11 @@ namespace Wannabuh.FPSController
         private void OnJump(InputAction.CallbackContext ctx)
         {
             _jumpInput = Math.Abs(ctx.ReadValue<float>() - 1.0f) < 0.001f ? true : false;
+        }
+
+        public void SetExtraJumps(int maxJumps)
+        {
+            _extraJumps += maxJumps;
         }
     }
 }
