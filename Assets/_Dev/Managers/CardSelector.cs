@@ -60,6 +60,8 @@ public class CardSelector : MonoBehaviour, IInteractable
 
         foreach (var card in _cards)
         {
+            if (!card.isRevealed) continue; 
+            
             card.Activate(_fpsController.gameObject);
         }
         

@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53543f63212b26b2d8efe6425d5099e7, type: 3}
-  m_Name: card_shotgun
+  m_Script: {fileID: 11500000, guid: 2ba7dfc4fd79bafe5a6ba4351f623c17, type: 3}
+  m_Name: quest_fetch-green-cards
   m_EditorClassIdentifier: 
-  Content: {fileID: 11400000, guid: 9a5d3640fdd05e62e9bba79438434f0b, type: 2}
-  CardColor: 2
-  CardType: 0
+  <Title>k__BackingField: Gather 2 green cards
+  <Description>k__BackingField: test
+  Requirements:
+  - {fileID: 11400000, guid: 5e370903601a2444eba22e0f370d73fb, type: 2}

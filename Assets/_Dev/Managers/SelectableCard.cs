@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class SelectableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public Card card = null;
+    [NonSerialized] private Card card = null;
     private CardSelector _cardSelector;
 
     private void Awake()

@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53543f63212b26b2d8efe6425d5099e7, type: 3}
-  m_Name: card_double-jump
+  m_Script: {fileID: 11500000, guid: c76c7640de994e931871a4dbce969e9f, type: 3}
+  m_Name: requirement_weapon-card
   m_EditorClassIdentifier: 
-  Content: {fileID: 11400000, guid: eea08496421b9a941bd5c0ebeda11752, type: 2}
-  CardColor: 1
-  CardType: 1
+  <Count>k__BackingField: 1
+  <CardColor>k__BackingField: 0
+  <CardType>k__BackingField: 1

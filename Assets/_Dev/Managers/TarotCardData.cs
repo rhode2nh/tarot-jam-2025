@@ -9,13 +9,16 @@ public class TarotCardData : ScriptableObject
 }
 
 public enum CardColor {
+    ANY,
     RED,
     BLUE,
     GREEN,
+    GOLD,
 }
 
 public enum CardType
 {
+    ANY,
     WEAPON,
     ABILITY,
     EFFECT,

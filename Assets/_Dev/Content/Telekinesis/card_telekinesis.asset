@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: card_telekinesis
   m_EditorClassIdentifier: 
   Content: {fileID: 11400000, guid: 1e8f3c22ee17b6a89a46e8a22e537520, type: 2}
-  CardColor: 1
-  CardType: 1
+  CardColor: 3
+  CardType: 2
