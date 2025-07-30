@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3815226809636037807}
   - component: {fileID: 7472522912856959355}
   - component: {fileID: 6108305213566425632}
-  - component: {fileID: 1918733642249612704}
+  - component: {fileID: 3289746846601184642}
   m_Layer: 0
   m_Name: body
   m_TagString: Untagged
@@ -106,7 +106,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -174,7 +174,7 @@ MonoBehaviour:
   _maxSlopeAngle: 55
   _maxJumps: 1
   Camera: {fileID: 7906441965429932534}
---- !u!114 &1918733642249612704
+--- !u!114 &3289746846601184642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,13 +183,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2726870737040891901}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6e9de4437aab382ab8451388ce0e4e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f67c7d815f07cff7afbbd5afb88efd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _abilities:
-  - {fileID: 11400000, guid: 77b1150c3ce9b6df58677571a96161a7, type: 2}
-  _fpsController: {fileID: 6108305213566425632}
-  _telePos: {fileID: 7889770918664948407}
+  _health: 100
 --- !u!1 &2735797527877361967
 GameObject:
   m_ObjectHideFlags: 0

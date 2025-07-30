@@ -26,7 +26,7 @@ public class CardSelector : MonoBehaviour, IInteractable
     private void OnEnable()
     {
         _fpsActions.CardSelector.ExitCardSelect.performed += ExitCardSelect;
-        _fpsActions.CardSelector.ExitCardSelect.Enable();
+        // _fpsActions.CardSelector.ExitCardSelect.Enable();
     }
 
     private void OnDisable()
@@ -42,11 +42,13 @@ public class CardSelector : MonoBehaviour, IInteractable
         _fpsActions.CardSelector.Enable();
         _cinemachineCamera.Priority = fpsController.Camera.Priority + 1;
         _cards = CardManager.Instance.GetCards();
-        for (int i = 0; i < _selectableCards.Count; i++)
+        _cards = _cards.Where(x => !x.isRevealed).Take(3).ToList();
+        Debug.Log(_cards.Count);
+        UIManager.Instance.OpenCardPanel();
+        for (int i = 0; i < _cards.Count; i++)
         {
-            if (i >= _cards.Count) break;
-            
             _selectableCards[i].SetCard(_cards[i]);
+            Debug.Log(_cards[i].data.name);
         }
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -54,6 +56,7 @@ public class CardSelector : MonoBehaviour, IInteractable
 
     private void ExitCardSelect(InputAction.CallbackContext ctx)
     {
+        UIManager.Instance.CloseCardPanel();
         _fpsActions.CardSelector.Disable();
         _fpsActions.Player.Enable();
         _cinemachineCamera.Priority = 1;
@@ -61,6 +64,8 @@ public class CardSelector : MonoBehaviour, IInteractable
         foreach (var card in _cards)
         {
             if (!card.isRevealed) continue; 
+            
+            Debug.Log("Here");
             
             card.Activate(_fpsController.gameObject);
         }
@@ -81,6 +86,7 @@ public class CardSelector : MonoBehaviour, IInteractable
 
     public bool CardsReadyToReveal()
     {
-        return _cards.Count(card => !card.isRevealed) >= revealThreshold || revealTriggered;
+        return true;
+        // return _cards.Count(card => !card.isRevealed) >= revealThreshold || revealTriggered;
     }
 }

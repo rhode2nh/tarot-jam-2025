@@ -2,27 +2,32 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SelectableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class SelectableCard : MonoBehaviour, IHoverInteractable
 {
-    [NonSerialized] private Card card = null;
+    [NonSerialized] private Card card;
     private CardSelector _cardSelector;
+    [SerializeField] private CardAnimator _cardAnimator;
 
     private void Awake()
     {
         _cardSelector = GetComponentInParent<CardSelector>();
+        _cardAnimator = GetComponentInChildren<CardAnimator>();
+        _cardAnimator.gameObject.SetActive(false);
     }
 
     public void SetCard(Card card)
     {
         this.card = card;
+        _cardAnimator.gameObject.SetActive(true);
     }
 
     public void ClearCard()
     {
         card = null;
+        _cardAnimator.gameObject.SetActive(false);
     }
     
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter()
     {
         if (card == null)
         {
@@ -30,6 +35,7 @@ public class SelectableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         }
         
+        _cardAnimator.Hover();
         if (!card.isRevealed)
         {
             Debug.Log("Hovering over Tarot Card (Unrevealed)");
@@ -39,12 +45,14 @@ public class SelectableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         Debug.Log("Hovering over " + card.data.name);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit()
     {
-        Debug.Log("Pointer is out " + gameObject.name);
+        if (card == null) return;
+        
+        _cardAnimator.Unhover();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick()
     {
         if (card == null)
         {
@@ -52,9 +60,19 @@ public class SelectableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         }
         
+        Debug.Log("Here");
+        
         if (!_cardSelector.CardsReadyToReveal()) return;
         
+        Debug.Log("Also Here");
+        
+        if (!card.isRevealed)
+        {
+            _cardAnimator.Flip();
+        }
+        
         Debug.Log("Card Revealed: " + card?.data.name);
+        UIManager.Instance.SetCardName(card?.data.name);
         card.isRevealed = true;
         card.isApplied = true;
         _cardSelector.TriggerReveal();

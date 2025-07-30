@@ -7,19 +7,18 @@ public class Telekinesis : Ability
 {
     public override void Activate(InputAction.CallbackContext ctx, GameObject player)
     {
-        var isPressed = Math.Abs(ctx.ReadValue<float>() - 1.0f) < 0.01f ? true : false;
-        // var abilityManager = player.GetComponent<AbilityManager>();
+        if (PlayerManager.Instance.Mana < ManaCost) return;
+        var isPressed = Math.Abs(ctx.ReadValue<float>() - 1.0f) < 0.01f;
         var abilityManager = AbilityManager.Instance;
-        if (abilityManager != null)
+        if (abilityManager == null) return;
+        
+        if (isPressed)
         {
-            if (isPressed)
-            {
-                abilityManager._telePos.Grab();
-            }
-            else
-            {
-                abilityManager._telePos.Release();
-            }
+            abilityManager._telePos.Grab();
+        }
+        else
+        {
+            abilityManager._telePos.Release();
         }
     }
 }

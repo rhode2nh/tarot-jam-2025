@@ -9,9 +9,9 @@ public class Jump : Ability
     
     public override void Activate(InputAction.CallbackContext ctx, GameObject player)
     {
-        if (player.TryGetComponent<FPSController>(out var fpsController))
-        {
-            fpsController.SetExtraJumps(jumps);
-        }
+        if (PlayerManager.Instance.Mana < ManaCost) return;
+        if (!player.TryGetComponent<FPSController>(out var fpsController)) return;
+        
+        fpsController.SetExtraJumps(jumps);
     }
 }

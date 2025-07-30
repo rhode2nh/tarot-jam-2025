@@ -105,3 +105,7 @@ InitTestScene*.unity*
 # Ignore everything else unless it's your own embedded package
 Packages/*
 !Packages/MyCustomPackage/
+
+blender/
+*.blend
+*.blend1

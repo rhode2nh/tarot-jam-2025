@@ -29,15 +29,13 @@ public class AbilityManager : MonoBehaviour
 
     public void UnlockAbility(Ability ability)
     {
-        if (!_activeAbilties.Contains(ability))
-        {
-            _activeAbilties.Add(ability);
-            if (ability.activationMap != null)
-            {
-                var action = ability.activationMap.action;
-                action.performed += ctx => ability.Activate(ctx, _fpsController.gameObject);
-                action.Enable();
-            }
-        }
+        if (_activeAbilties.Contains(ability) && !ability.Stackable) return;
+        
+        _activeAbilties.Add(ability);
+        
+        if (ability.activationMap == null) return;
+        var action = ability.activationMap.action;
+        action.performed += ctx => ability.Activate(ctx, _fpsController.gameObject);
+        action.Enable();
     }
 }

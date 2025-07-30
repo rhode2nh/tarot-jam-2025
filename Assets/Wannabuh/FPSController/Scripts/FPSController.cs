@@ -12,7 +12,7 @@ namespace Wannabuh.FPSController
         [SerializeField] private float _moveSpeed = 0.1f;
         [SerializeField] private float _acceleration = 2.0f;
         [SerializeField] private float _deceleration = 2.0f;
-        [SerializeField] private Transform _cameraRig;
+        [SerializeField] public Transform _cameraRig;
         [SerializeField] private CinemachineInputAxisController _axisController;
         [SerializeField] private Vector3 _gravity = Physics.gravity;
         [SerializeField] private float _groundCheckRadius;
@@ -103,7 +103,7 @@ namespace Wannabuh.FPSController
             float distance = velocity.magnitude + _skinWidth;
 
             RaycastHit hit;
-            if (Physics.SphereCast(pos, _bounds.extents.x, velocity.normalized, out hit, distance, _groundMask))
+            if (Physics.SphereCast(pos, _bounds.extents.x, velocity.normalized, out hit, distance, _groundMask, QueryTriggerInteraction.Ignore))
             {
                 Vector3 snapToSurface = velocity.normalized * (hit.distance - _skinWidth);
                 Vector3 leftOver = velocity - snapToSurface;
@@ -128,19 +128,7 @@ namespace Wannabuh.FPSController
                         new Vector3(hit.normal.x, 0, hit.normal.z).normalized,
                         -new Vector3(initialVelocity.x, 0, initialVelocity.z).normalized
                     );
-
-                    if (_isGrounded && !gravityPass)
-                    {
-                        leftOver = ProjectAndScale(
-                            new Vector3(leftOver.x, 0, leftOver.z),
-                            new Vector3(hit.normal.x, 0, hit.normal.z)
-                        ).normalized;
-                        leftOver *= scale;
-                    }
-                    else
-                    {
-                        leftOver = ProjectAndScale(leftOver, hit.normal) * scale;
-                    }
+                    leftOver = ProjectAndScale(leftOver, hit.normal) * scale;
                 }
 
                 return snapToSurface + CollideAndSlide(leftOver, pos + snapToSurface, depth + 1, gravityPass, initialVelocity);
@@ -233,6 +221,7 @@ namespace Wannabuh.FPSController
 
         public void SetExtraJumps(int maxJumps)
         {
+            Debug.Log(maxJumps);
             _extraJumps += maxJumps;
         }
     }

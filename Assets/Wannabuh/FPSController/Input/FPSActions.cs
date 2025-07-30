@@ -136,6 +136,15 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e9ba9e1-2b3c-4651-ac7a-c849bab8fbb2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -237,6 +246,17 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ede3fa9-3fcf-45c9-a837-d10cf5c19ebe"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -248,6 +268,15 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
                     ""name"": ""ExitCardSelect"",
                     ""type"": ""Button"",
                     ""id"": ""8173bd4b-67de-41de-a807-fbdb700745a5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectCard"",
+                    ""type"": ""Button"",
+                    ""id"": ""048c3785-fe07-42d6-a00f-f026f2128961"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -265,6 +294,17 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
                     ""action"": ""ExitCardSelect"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3eac08eb-ddbf-48d0-83a1-5ee4ae077745"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectCard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -278,9 +318,11 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Ability1 = m_Player.FindAction("Ability1", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         // CardSelector
         m_CardSelector = asset.FindActionMap("CardSelector", throwIfNotFound: true);
         m_CardSelector_ExitCardSelect = m_CardSelector.FindAction("ExitCardSelect", throwIfNotFound: true);
+        m_CardSelector_SelectCard = m_CardSelector.FindAction("SelectCard", throwIfNotFound: true);
     }
 
     ~@FPSActions()
@@ -367,6 +409,7 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Ability1;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Attack;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -398,6 +441,10 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Attack".
+        /// </summary>
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -439,6 +486,9 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         /// <summary>
@@ -465,6 +515,9 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         /// <summary>
@@ -503,6 +556,7 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_CardSelector;
     private List<ICardSelectorActions> m_CardSelectorActionsCallbackInterfaces = new List<ICardSelectorActions>();
     private readonly InputAction m_CardSelector_ExitCardSelect;
+    private readonly InputAction m_CardSelector_SelectCard;
     /// <summary>
     /// Provides access to input actions defined in input action map "CardSelector".
     /// </summary>
@@ -518,6 +572,10 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CardSelector/ExitCardSelect".
         /// </summary>
         public InputAction @ExitCardSelect => m_Wrapper.m_CardSelector_ExitCardSelect;
+        /// <summary>
+        /// Provides access to the underlying input action "CardSelector/SelectCard".
+        /// </summary>
+        public InputAction @SelectCard => m_Wrapper.m_CardSelector_SelectCard;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -547,6 +605,9 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
             @ExitCardSelect.started += instance.OnExitCardSelect;
             @ExitCardSelect.performed += instance.OnExitCardSelect;
             @ExitCardSelect.canceled += instance.OnExitCardSelect;
+            @SelectCard.started += instance.OnSelectCard;
+            @SelectCard.performed += instance.OnSelectCard;
+            @SelectCard.canceled += instance.OnSelectCard;
         }
 
         /// <summary>
@@ -561,6 +622,9 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
             @ExitCardSelect.started -= instance.OnExitCardSelect;
             @ExitCardSelect.performed -= instance.OnExitCardSelect;
             @ExitCardSelect.canceled -= instance.OnExitCardSelect;
+            @SelectCard.started -= instance.OnSelectCard;
+            @SelectCard.performed -= instance.OnSelectCard;
+            @SelectCard.canceled -= instance.OnSelectCard;
         }
 
         /// <summary>
@@ -636,6 +700,13 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAttack(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CardSelector" which allows adding and removing callbacks.
@@ -651,5 +722,12 @@ public partial class @FPSActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnExitCardSelect(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectCard" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectCard(InputAction.CallbackContext context);
     }
 }

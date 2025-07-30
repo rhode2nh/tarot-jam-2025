@@ -15,4 +15,6 @@ MonoBehaviour:
   abilityName: Jump
   activationMap: {fileID: -2469636258843504925, guid: a43fa65185a79e525afb800a37d4945b,
     type: 3}
-  jumps: 2
+  Stackable: 1
+  <ManaCost>k__BackingField: 0
+  jumps: 1
